@@ -3,7 +3,7 @@ self.addEventListener("push", function (event) {
 
   const options = {
     body: data.body,
-    title: data.title,
+    title: data.title + " 🎉",
     data: { url: data.url },
     icon: "/icon-192.png",
     badge: "/icon-192.png",
