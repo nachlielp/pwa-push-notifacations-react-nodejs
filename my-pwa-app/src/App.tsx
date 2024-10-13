@@ -4,20 +4,6 @@ import { notification } from "antd";
 import { messaging } from "./firebase";
 import { onMessage } from "firebase/messaging";
 
-function notifyUser() {
-  if (!("Notification" in window)) {
-    alert("This browser does not support desktop notification");
-  } else {
-    Notification.requestPermission().then((permission) => {
-      if (permission === "granted") {
-        new Notification("Hello", {
-          body: "This is a test notification",
-        });
-      }
-    });
-  }
-}
-
 function App() {
   const [api, contextHolder] = notification.useNotification();
 
