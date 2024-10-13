@@ -1,23 +1,61 @@
 self.addEventListener("push", function (event) {
-  const data = event.data.json();
-  console.log("data: ", data);
+  const { data } = event.data.json();
+
   const options = {
     body: data.body,
-    icon: "/icon-192x192.png",
-    badge: "/icon-192x192.png",
-    data: {
-      url: data.link,
-    },
+    title: data.title,
+
+    data: { url: data.url },
   };
-  event.waitUntil(self.registration.showNotification("CI Eents", options));
+  console.log("options:4 ", options);
+  event.waitUntil(self.registration.showNotification(data.title, options));
 });
 
 self.addEventListener("notificationclick", (event) => {
+  console.log("notificationData.event: ", event);
   const notificationData = event.notification.data;
-
   if (notificationData.url) {
     clients.openWindow(notificationData.url);
   }
 
   event.notification.close();
+});
+
+//TODO cach images and assets
+const cacheName = "my-pwa-shell-v1.4";
+const filesToCache = [];
+
+self.addEventListener("install", (e) => {
+  console.log("[ServiceWorker] - Install");
+  self.skipWaiting();
+  e.waitUntil(
+    (async () => {
+      const cache = await caches.open(cacheName);
+      console.log("[ServiceWorker] - Caching app shell");
+      await cache.addAll(filesToCache);
+    })()
+  );
+});
+
+//clean up old caches by name
+self.addEventListener("activate", (e) => {
+  e.waitUntil(
+    (async () => {
+      // await self.registration.unregister();
+      console.log("[ServiceWorker] - Unregistered old service worker");
+
+      const keyList = await caches.keys();
+      await Promise.all(
+        keyList.map((key) => {
+          console.log(key);
+
+          if (key !== cacheName) {
+            console.log("[ServiceWorker] - Removing old cache", key);
+            return caches.delete(key);
+          }
+        })
+      );
+    })()
+  );
+  self.clients.claim();
 });

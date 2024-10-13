@@ -20,7 +20,7 @@ app.use(
 app.use(bodyParser.json());
 
 app.post("/api/send-notification", (req, res) => {
-  const { token, title, body } = req.body;
+  const { token, title, body, url } = req.body;
   console.log("send-notification: ", req.body);
   if (!token) {
     return res.status(400).json({ error: "Token is required" });
@@ -30,6 +30,7 @@ app.post("/api/send-notification", (req, res) => {
     data: {
       title: title || "New Notification",
       body: body || "This is a push notification from your server.",
+      url: url || "https://example.com/messages",
     },
     token: token,
   };
