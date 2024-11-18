@@ -1,15 +1,37 @@
 self.addEventListener("push", function (event) {
   const { data } = event.data.json();
 
-  const options = {
-    body: data.body,
-    title: data.title + " 🎉",
-    data: { url: data.url },
-    icon: "/icon-192.png",
-    badge: "/icon-192.png",
+  // Get current badge count from IndexedDB or other storage
+  const getBadgeCount = async () => {
+    const reg = await self.registration;
+    return reg
+      .getNotifications()
+      .then((notifications) => notifications.length + 1);
   };
-  console.log("options:5 ", options);
-  event.waitUntil(self.registration.showNotification(data.title, options));
+
+  // Wrap the entire async operation in waitUntil
+  event.waitUntil(
+    (async () => {
+      const count = await getBadgeCount();
+      const options = {
+        body: data.body,
+        title: data.title + " 🎉",
+        data: { url: data.url },
+        icon: "/icon-192.png",
+        badge: count.toString(),
+      };
+
+      console.log("options:4 ", options);
+
+      // Set app badge
+      if (navigator.setAppBadge) {
+        navigator.setAppBadge(count);
+      }
+
+      console.log("options:5 ", options);
+      return self.registration.showNotification(data.title, options);
+    })()
+  );
 });
 
 self.addEventListener("notificationclick", (event) => {
