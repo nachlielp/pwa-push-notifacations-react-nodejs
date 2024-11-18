@@ -12,7 +12,7 @@ self.addEventListener("push", function (event) {
   // Wrap the entire async operation in waitUntil
   event.waitUntil(
     (async () => {
-      const count = await getBadgeCount();
+      // const count = await getBadgeCount();
       const options = {
         body: data.body,
         title: data.title + " 🎉",
@@ -23,7 +23,7 @@ self.addEventListener("push", function (event) {
 
       // Set app badge
       if (navigator.setAppBadge) {
-        navigator.setAppBadge(count);
+        navigator.setAppBadge(data.count);
       }
 
       console.log("options:5 ", options);
