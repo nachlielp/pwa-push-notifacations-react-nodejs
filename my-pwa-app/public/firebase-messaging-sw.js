@@ -2,16 +2,16 @@ self.addEventListener("push", function (event) {
   const { data } = event.data.json();
 
   // Get current badge count from IndexedDB or other storage
-  const getBadgeCount = async () => {
-    const reg = await self.registration;
-    return reg
-      .getNotifications()
-      .then((notifications) => notifications.length + 1);
-  };
+  //anynimous function in waitUntil needs to be async for this
+  // const getBadgeCount = async () => {
+  //   const reg = await self.registration;
+  //   return reg
+  //     .getNotifications()
+  //     .then((notifications) => notifications.length + 1);
+  // };
 
-  // Wrap the entire async operation in waitUntil
   event.waitUntil(
-    (async () => {
+    (() => {
       // const count = await getBadgeCount();
       const options = {
         body: data.body,
@@ -21,7 +21,6 @@ self.addEventListener("push", function (event) {
         badge: data.count,
       };
 
-      // Set app badge
       if (navigator.setAppBadge) {
         navigator.setAppBadge(data.count);
       }
