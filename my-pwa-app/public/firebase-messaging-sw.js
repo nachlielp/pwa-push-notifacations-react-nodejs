@@ -1,34 +1,38 @@
 self.addEventListener("push", function (event) {
-  const { data } = event.data.json();
+  try {
+    const { data } = event.data.json();
 
-  // Get current badge count from IndexedDB or other storage
-  //anynimous function in waitUntil needs to be async for this
-  // const getBadgeCount = async () => {
-  //   const reg = await self.registration;
-  //   return reg
-  //     .getNotifications()
-  //     .then((notifications) => notifications.length + 1);
-  // };
+    // Get current badge count from IndexedDB or other storage
+    //anynimous function in waitUntil needs to be async for this
+    // const getBadgeCount = async () => {
+    //   const reg = await self.registration;
+    //   return reg
+    //     .getNotifications()
+    //     .then((notifications) => notifications.length + 1);
+    // };
 
-  event.waitUntil(
-    (() => {
-      // const count = await getBadgeCount();
-      const options = {
-        body: data.body,
-        title: data.title,
-        data: { push_event_url: data.url },
-        icon: "/192.png",
-        badge: data.badge,
-      };
+    event.waitUntil(
+      (() => {
+        // const count = await getBadgeCount();
+        const options = {
+          body: data.body,
+          title: data.title,
+          data: { push_event_url: data.url },
+          icon: "/192.png",
+          badge: data.badge,
+        };
 
-      if (navigator.setAppBadge) {
-        navigator.setAppBadge(data.badge);
-      }
+        if (navigator.setAppBadge) {
+          navigator.setAppBadge(data.badge);
+        }
 
-      console.log("options:5 ", options);
-      return self.registration.showNotification(data.title, options);
-    })()
-  );
+        console.log("options:5 ", options);
+        return self.registration.showNotification(data.title, options);
+      })()
+    );
+  } catch (error) {
+    console.error("Error in push event: ", error);
+  }
 });
 
 self.addEventListener("notificationclick", (event) => {
