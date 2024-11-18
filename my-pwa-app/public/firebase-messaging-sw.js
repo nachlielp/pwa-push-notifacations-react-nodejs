@@ -15,10 +15,10 @@ self.addEventListener("push", function (event) {
       // const count = await getBadgeCount();
       const options = {
         body: data.body,
-        title: data.title + " 🎉",
-        data: { url: data.url },
-        icon: "/icon-192.png",
-        badge: data.count,
+        title: data.title,
+        data: { push_event_url: data.url },
+        icon: "/192.png",
+        badge: data.badge,
       };
 
       if (navigator.setAppBadge) {
