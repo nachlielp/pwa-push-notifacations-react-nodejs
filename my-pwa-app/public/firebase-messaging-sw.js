@@ -22,7 +22,7 @@ self.addEventListener("push", function (event) {
       };
 
       if (navigator.setAppBadge) {
-        navigator.setAppBadge(data.count);
+        navigator.setAppBadge(data.badge);
       }
 
       console.log("options:5 ", options);
