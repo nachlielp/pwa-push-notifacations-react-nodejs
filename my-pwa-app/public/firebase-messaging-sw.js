@@ -18,10 +18,8 @@ self.addEventListener("push", function (event) {
         title: data.title + " 🎉",
         data: { url: data.url },
         icon: "/icon-192.png",
-        badge: count.toString(),
+        badge: data.count,
       };
-
-      console.log("options:4 ", options);
 
       // Set app badge
       if (navigator.setAppBadge) {
