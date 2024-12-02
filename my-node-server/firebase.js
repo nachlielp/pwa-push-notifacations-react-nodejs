@@ -5,7 +5,7 @@ import fs from "fs";
 dotenv.config();
 
 const serviceAccount = JSON.parse(
-  fs.readFileSync(process.env.SERVICE_ACCOUNT_KEY_PATH, "utf8")
+  Buffer.from(process.env.SERVICE_ACCOUNT_KEY_BASE64, "base64").toString("utf8")
 );
 
 console.log(serviceAccount);
